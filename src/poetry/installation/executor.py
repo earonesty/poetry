@@ -618,7 +618,7 @@ class Executor:
         self._populate_hashes_dict(archive, package)
 
         return self._chef.prepare(
-            archive, editable=package.develop, output_dir=output_dir
+            archive, editable=package.develop, output_dir=output_dir, config_settings=package.config_settings
         )
 
     def _prepare_git_archive(self, operation: Install | Update) -> Path:
