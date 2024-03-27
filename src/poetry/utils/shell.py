@@ -16,6 +16,7 @@ from shellingham import ShellDetectionFailure
 from shellingham import detect_shell
 
 from poetry.utils._compat import WINDOWS
+from security import safe_command
 
 
 if TYPE_CHECKING:
@@ -91,7 +92,7 @@ class Shell:
                 args = ["/K", str(activate_path)]
 
             if args:
-                completed_proc = subprocess.run([self.path, *args])
+                completed_proc = safe_command.run(subprocess.run, [self.path, *args])
                 return completed_proc.returncode
             else:
                 # If no args are set, execute the shell within the venv

@@ -10,6 +10,7 @@ from typing import Any
 
 from poetry.utils.env.script_strings import GET_PATHS_FOR_GENERIC_ENVS
 from poetry.utils.env.virtual_env import VirtualEnv
+from security import safe_command
 
 
 if TYPE_CHECKING:
@@ -90,7 +91,7 @@ class GenericEnv(VirtualEnv):
         if not self._is_windows:
             return os.execvpe(command[0], command, env=env)
 
-        exe = subprocess.Popen(command, env=env, **kwargs)
+        exe = safe_command.run(subprocess.Popen, command, env=env, **kwargs)
         exe.communicate()
 
         return exe.returncode
