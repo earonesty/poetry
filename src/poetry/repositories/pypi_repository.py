@@ -18,6 +18,7 @@ from poetry.repositories.http_repository import HTTPRepository
 from poetry.repositories.link_sources.json import SimpleJsonPage
 from poetry.repositories.parsers.pypi_search_parser import SearchResultParser
 from poetry.utils.constants import REQUESTS_TIMEOUT
+from security import safe_requests
 
 
 cache_control_logger.setLevel(logging.ERROR)
@@ -53,8 +54,7 @@ class PyPiRepository(HTTPRepository):
     def search(self, query: str) -> list[Package]:
         results = []
 
-        response = requests.get(
-            self._base_url + "search", params={"q": query}, timeout=REQUESTS_TIMEOUT
+        response = safe_requests.get(self._base_url + "search", params={"q": query}, timeout=REQUESTS_TIMEOUT
         )
         parser = SearchResultParser()
         parser.feed(response.text)
