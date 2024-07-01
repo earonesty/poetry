@@ -17,6 +17,7 @@ from virtualenv.seed.wheels.embed import get_embed_wheel
 from poetry.utils.env.exceptions import EnvCommandError
 from poetry.utils.env.site_packages import SitePackages
 from poetry.utils.helpers import get_real_windows_path
+from security import safe_command
 
 
 if TYPE_CHECKING:
@@ -351,7 +352,7 @@ class Env:
             return os.execvpe(command[0], command, env=env)
 
         kwargs["shell"] = True
-        exe = subprocess.Popen(command, env=env, **kwargs)
+        exe = safe_command.run(subprocess.Popen, command, env=env, **kwargs)
         exe.communicate()
         return exe.returncode
 
